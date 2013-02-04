@@ -7,11 +7,11 @@ type term interface {
 }
 
 type function struct {
-	constructor string
+	constructor *constructor
 	children []term
 }
 func (f *function) String() string {
-	retval := f.constructor
+	retval := f.constructor.String()
 	arity := len(f.children)
 	if arity == 0 {
 		return retval
@@ -41,8 +41,9 @@ var _ term = &function{}
 var _ term = &variable{}
 
 
-func NewFunction(constructor string, children []term) term {
-	var f term = &function{constructor, children}
+func NewFunction(constructorName string, children []term) term {
+	c := NewConstructor(constructorName)
+	var f term = &function{c, children}
 	return f
 }
 
