@@ -13,9 +13,18 @@ func main() {
 	xpsy := NewFunction("+", []term{x, sy})
 	sxpy := NewFunction("s", []term{xpy})
 
+	allToZero := NewRule(x, zero)
+
 	add1 := NewRule(xp0, x)
 	add2 := NewRule(xpsy, sxpy)
 
-	fmt.Printf("%v\n", add1.String())
-	fmt.Printf("%v\n", add2.String())
+	addition := system{[]rule{add1, add2}}
+
+	subst, ok := allToZero.Match(sy)
+	fmt.Printf("%v\n", ok)
+	fmt.Printf("%s\n", subst.String())
+
+	// fmt.Printf("%s\n", add1.String())
+	// fmt.Printf("%s\n", add2.String())
+	fmt.Printf("%s\n", addition)
 }

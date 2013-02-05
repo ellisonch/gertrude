@@ -4,21 +4,22 @@ import "strings"
 
 type term interface {
 	String() string
+	IsVariable() bool
 }
 
 type function struct {
 	constructor *constructor
 	children []term
 }
-func (f *function) String() string {
-	retval := f.constructor.String()
-	arity := len(f.children)
+func (this *function) String() string {
+	retval := this.constructor.String()
+	arity := len(this.children)
 	if arity == 0 {
 		return retval
 	}
 
 	stringChildren := []string{}
-	for _, child := range f.children {
+	for _, child := range this.children {
 		stringChildren = append(stringChildren, child.String())
 	}
 
@@ -27,12 +28,18 @@ func (f *function) String() string {
 	retval += ")"
 	return retval
 }
+func (this *function) IsVariable() bool {
+	return false
+}
 
 type variable struct {
 	name string
 }
-func (f *variable) String() string {
-	return f.name
+func (this *variable) String() string {
+	return this.name
+}
+func (this *variable) IsVariable() bool {
+	return true
 }
 
 
