@@ -5,11 +5,27 @@ import "strings"
 type term interface {
 	String() string
 	IsVariable() bool
+	GetConstructor() *constructor // wtfffff
+	GetChildren() []term
+	AsVariable() *variable
+	AsFunction() *function
 }
 
 type function struct {
 	constructor *constructor
 	children []term
+}
+func (this *function) GetConstructor() *constructor {
+	return this.constructor
+}
+func (this *function) GetChildren() []term {
+	return this.children
+}
+func (this *function) AsVariable() *variable {
+	return nil
+}
+func (this *function) AsFunction() *function {
+	return this
 }
 func (this *function) String() string {
 	retval := this.constructor.String()
@@ -41,7 +57,18 @@ func (this *variable) String() string {
 func (this *variable) IsVariable() bool {
 	return true
 }
-
+func (this *variable) GetConstructor() *constructor {
+	return nil
+}
+func (this *variable) GetChildren() []term {
+	return nil
+}
+func (this *variable) AsVariable() *variable {
+	return this
+}
+func (this *variable) AsFunction() *function {
+	return nil
+}
 
 // statically check that functions and variables are terms
 var _ term = &function{}

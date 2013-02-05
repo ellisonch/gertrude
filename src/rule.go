@@ -1,6 +1,6 @@
 package main
 
-import "fmt"
+import _ "fmt"
 
 type rule struct {
 	lhs term
@@ -23,13 +23,7 @@ func (this rule) match_aux(t term, c constraints) (subst substitution, matches b
 	// rhs := this.rhs
 
 	if lhs.IsVariable() {
-		return buildSubstitution(c.AddConstraint(lhs, t))
+		return c.AddConstraint(lhs, t).BuildSubstitution()
 	}
-	return nil, false
-}
-
-func buildSubstitution(c constraints) (subst substitution, matches bool) {
-	fmt.Printf("%s", c.String())
-	
 	return nil, false
 }
