@@ -29,14 +29,19 @@ func main() {
 	add1 := NewRule(xp0, x)
 	add2 := NewRule(xpsy, sxpy)
 
-	addition := system{[]rule{add1, add2}}
+	addition := system{[]rule{add2, add1}}
 
-	subst, ok := Match(add2.lhs, onePlusThree)
-	fmt.Printf("%v\n", ok)
-	fmt.Printf("%s\n", subst.String())
-	fmt.Printf("\nApplying %s to %s\n", add2, onePlusThree)
-	t, ok := add2.Apply(onePlusThree)
-	fmt.Printf("%s, %v\n", t, ok)
+	// subst, ok := Match(add2.lhs, onePlusThree)
+	// fmt.Printf("%v\n", ok)
+	// fmt.Printf("%s\n", subst.String())
+
+	// fmt.Printf("-------------\n");
+	// fmt.Printf("\nApplying %s to %s\n", add2, onePlusThree)
+	// t1, ok := add2.Apply(onePlusThree)
+	// fmt.Printf("%s, %v\n", t1, ok)
+	fmt.Printf("-------------\n");
+	t2, ok := addition.Rewrite(onePlusThree)
+	fmt.Printf("Final Answer: %s, %v\n", t2, ok)
 
 	// fmt.Printf("%s\n", add1.String())
 	// fmt.Printf("%s\n", add2.String())

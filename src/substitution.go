@@ -5,11 +5,11 @@ package main
 type substitution map[string]term
 
 func (s substitution) String() string {
-	retval := "{\n"
+	retval := "{"
 	for v, t := range s {
-		retval += "  " + v + " === " + t.String() + "\n"
+		retval += "  " + v + " === " + t.String() + ", "
 	}
-	retval += "}\n"
+	retval += "}"
 	return retval
 }
 func (this substitution) AddSubstitution(v *variable, t term) substitution {

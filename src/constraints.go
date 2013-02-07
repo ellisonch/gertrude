@@ -11,11 +11,11 @@ type constraint struct {
 type constraints []constraint
 
 func (this constraints) String() string {
-	retval := "{\n"
+	retval := "{"
 	for _, constraint := range this {
-		retval += "  " + constraint.lhs.String() + " = " + constraint.rhs.String() + "\n"
+		retval += "  " + constraint.lhs.String() + " = " + constraint.rhs.String() + ", "
 	}
-	retval += "}\n"
+	retval += "}"
 	return retval
 }
 
@@ -36,7 +36,7 @@ func (this constraints) AddConstraint(t1 *variable, t2 term) constraints {
 // }
 
 func (this constraints) BuildSubstitution() (subst substitution, matches bool) {
-	fmt.Printf("Trying to build substitution from constraints: %s", this)
+	fmt.Printf("Trying to build substitution from constraints: %s\n", this)
 
 	s := NewSubstitution()
 
@@ -51,6 +51,8 @@ func (this constraints) BuildSubstitution() (subst substitution, matches bool) {
 			s[lhs.name] = rhs
 		}
 	}
+
+	fmt.Printf("Done.  Subst: %s\n", s)
 
 	return s, true
 }
