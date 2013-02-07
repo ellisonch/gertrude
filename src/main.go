@@ -34,6 +34,9 @@ func main() {
 	subst, ok := Match(add2.lhs, onePlusThree)
 	fmt.Printf("%v\n", ok)
 	fmt.Printf("%s\n", subst.String())
+	fmt.Printf("\nApplying %s to %s\n", add2, onePlusThree)
+	t, ok := add2.Apply(onePlusThree)
+	fmt.Printf("%s, %v\n", t, ok)
 
 	// fmt.Printf("%s\n", add1.String())
 	// fmt.Printf("%s\n", add2.String())

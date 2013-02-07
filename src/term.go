@@ -10,6 +10,7 @@ type term interface {
 	ContainsVariable(v *variable) bool
 	Equals(t term) bool
 	EqualsFunction(t *function) bool
+	Apply(s substitution) (term, bool)
 	// EqualsVariable(t *variable) bool
 }
 
@@ -72,6 +73,20 @@ func (t1 *function) match_with_function(t2 *function, c constraints) (constraint
 	return c, true
 }
 
+// need to consider whether we're replacing in place or what
+func (t *function) Apply(s substitution) (term, bool) {
+	newChildren := []term{}
+	for _, child := range t.children {
+		if newC, ok := child.Apply(s); ok {
+			newChildren = append(newChildren, newC)
+		} else {
+			return nil, false
+		}
+	}
+	t.children = newChildren
+	return t, true
+}
+
 
 func (this *function) ContainsVariable(v *variable) bool {
 	for _, child := range this.children {
@@ -131,6 +146,14 @@ func (this *variable) Equals(t term) bool {
 func (this *variable) EqualsFunction(t *function) bool {
 	fmt.Printf("This should never happen")
 	return false
+}
+// need to consider whether we're replacing in place or what
+func (t *variable) Apply(s substitution) (term, bool) {
+	if result, ok := s[t.name]; ok {
+		return result, true
+	}
+	fmt.Printf("This should never happen")
+	return nil, false
 }
 
 // ----------------------------------------------------------------------------------------
