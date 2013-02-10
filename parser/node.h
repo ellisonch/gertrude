@@ -24,6 +24,16 @@ public:
     }
 };
 
+static std::string wrapWith(std::string s, const char* name) {
+    std::string retval = std::string("<");
+    retval.append(name);
+    retval.append(">");
+    retval.append(s);
+    retval.append("</");
+    retval.append(name);
+    retval.append(">\n");
+    return retval;
+}
 
 class RuleSet {
 private:
@@ -34,9 +44,13 @@ public:
     }
     std::string AsXML() {
         std::string retval = std::string("<?xml version=\"1.0\"?>\n");
+
+        std::string rules = std::string("");
         for(std::vector<Rule>::iterator it = _rules->begin(); it != _rules->end(); ++it) {
-            retval.append((*it).AsXML());
+            rules.append((*it).AsXML());
         }
+
+        retval.append(wrapWith(rules, "Rules"));
         return retval;
     }
 };
