@@ -18,7 +18,7 @@ char linebuf[500];
         yyless(1);      /* give back all but the \n to rescan */
       }
 [A-Z][a-zA-Z0-9_]* { yylval.string = yytext; return VARIABLE; }
-[\+\-\*\/0-9]+ { yylval.string = yytext; return FUNCTION; }
+[+\-*^/0-9a-z][+\-*^/0-9a-zA-Z]* { yylval.string = yytext; return FUNCTION; }
 [,] { return COMMA; }
 [\/\/].+ { }
 ";" { return SEMICOLON; }

@@ -1,10 +1,10 @@
 #include <iostream>
 #include "node.h"
-extern Term* program;
+extern RuleSet* program;
 extern int yyparse();
 
 int main(int argc, char **argv) {
     yyparse();
-    // std::cout << program << std::endl;
+    std::cout << program->AsXML() << std::endl;
     return 0;
 }

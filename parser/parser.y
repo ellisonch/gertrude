@@ -6,6 +6,9 @@
 using namespace std;
 int yylex(); 
 int yyerror(const char *p);
+extern char linebuf[500];
+
+RuleSet* program;
 %}
 
 //-- SYMBOL SEMANTIC VALUES -----------------------------
@@ -14,22 +17,31 @@ int yyerror(const char *p);
   char sym;
   char* string;
   Term* term;
+  Rule* rule;
   std::vector<Term>* children;
+  std::vector<Rule>* rules;
+  RuleSet* ruleset;
 };
 %token REWRITE COMMA LEFT_PAREN RIGHT_PAREN SEMICOLON
 %token <string> VARIABLE FUNCTION
 
-%type <term> term variable rule run function
+%type <term> term variable function
+%type <rule> rule
+%type <rules> run
 %type <children> children
+%type <ruleset> program
 
 %locations
 // %type  <val> exp term sfactor factor res
 
 //-- GRAMMAR RULES ---------------------------------------
 %%
-run: rule run | rule    /* forces bison to process many stmts */
+program: run { $$ = new RuleSet($1); program = $$; }
 
-rule: term REWRITE term SEMICOLON { cout << "a rule\n" << endl; }
+run: rule run { $$ = $2; $2->push_back(*$1); }
+| rule { $$ = new std::vector<Rule>(); $$->push_back(*$1); }
+
+rule: term REWRITE term SEMICOLON { $$ = new Rule($1, $3); }
 // | error SEMICOLON { yyerrok; }
 
 term: LEFT_PAREN term RIGHT_PAREN { $$ = $2; }
@@ -41,10 +53,8 @@ variable: VARIABLE { $$ = new Variable($1); }
 function: FUNCTION { $$ = new Function($1); }
 | FUNCTION LEFT_PAREN children RIGHT_PAREN { $$ = new Function($1, $3); }
 
-children: {$$ = new std::vector<Term>()}
+children: term { $$ = new std::vector<Term>(); $$->push_back(*$1); }
 | term COMMA children { $$ = $3; $3->push_back(*$1) }
-
-*/
 
 %%
 
@@ -53,7 +63,7 @@ children: {$$ = new std::vector<Term>()}
 int yyerror(const char *p) { 
   // cerr << "Error: " << p << endl; 
   if(yylloc.first_line) {
-    cerr << "ERROR line " <<yylloc.first_line << ": " << p << endl;
+    cerr << "ERROR line " <<yylloc.first_line << ": " << p << endl << linebuf << endl;
   }
 }
 
