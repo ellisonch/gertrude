@@ -1,4 +1,4 @@
-package main
+package terms
 
 type constructor struct {
 	name string
