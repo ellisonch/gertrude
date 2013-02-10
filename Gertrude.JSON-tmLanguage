@@ -1,0 +1,18 @@
+{ "name": "Gertrude",
+  "scopeName": "source.grt",
+  "fileTypes": ["grt"],
+  "patterns": [
+		{ "match": "[A-Z][A-Za-z0-9_]*",
+			"name": "keyword.source.grt",
+			"comment": "Variables like PARAM1, TM_SELECTION..."
+		},
+		{ "name": "variable.complex.ssraw",
+		   "begin": "(\\()",
+		   "patterns": [
+		       { "include": "$self" }
+		   ],
+		   "end": "\\)"
+		}
+  ],
+  "uuid": "031e51ac-5824-4122-87a8-5498286ea157"
+}
