@@ -1,5 +1,4 @@
 %{
-// Based on code that is
 // Copyright (c) 2011 CZ.NIC z.s.p.o. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
@@ -64,23 +63,6 @@ F {D}"."{D}?{E}?|{D}{E}?|"."{D}{E}?
     y.buf = y.buf[:0]
 
 [ \t\r]+
-
-[A-Z][a-zA-Z0-9_]*
-	// yylval.string = yytext 
-	return VARIABLE
-
-[+\-*^/0-9a-z][+\-*^/0-9a-zA-Z]*
-	// yylval.string = yytext
-	return FUNCTION
-
-";" { return SEMICOLON }
-"=>" { return REWRITE }
-
-[,] { return COMMA }
-[\/\/].+ { }
-
-"(" { return LEFT_PAREN }
-")" { return RIGHT_PAREN }
 
 {F}
     if lval.value, err = strconv.ParseFloat(string(y.buf), 64); err != nil {

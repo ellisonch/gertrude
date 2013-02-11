@@ -11,8 +11,6 @@ The Copyright License for the GNU Bison Manual can be found in the "fdl-1.3" fil
 
 %{
 
-// +build ignore
-
 package parser
 
 import (

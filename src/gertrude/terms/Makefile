@@ -1,6 +1,5 @@
 
-
-rewrite: main.go maude.go term.go rule.go substitution.go system.go constructor.go constraints.go
+rewrite: term.go rule.go substitution.go system.go constructor.go constraints.go
 	@go build -o $@
 
 run: rewrite
