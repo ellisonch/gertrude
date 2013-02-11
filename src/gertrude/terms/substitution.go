@@ -2,7 +2,7 @@ package terms
 
 // import "fmt"
 
-type substitution map[string]term
+type substitution map[string]Term
 
 func (s substitution) String() string {
 	retval := "{"
@@ -12,7 +12,7 @@ func (s substitution) String() string {
 	retval += "}"
 	return retval
 }
-func (this substitution) AddSubstitution(v *variable, t term) substitution {
+func (this substitution) AddSubstitution(v *variable, t Term) substitution {
 	this[v.name] = t
 	return this
 }

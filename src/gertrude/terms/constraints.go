@@ -5,7 +5,7 @@ import "fmt"
 
 type constraint struct {
 	lhs *variable
-	rhs term
+	rhs Term
 }
 
 type constraints []constraint
@@ -23,11 +23,11 @@ func NewConstraints() constraints {
 	return make(constraints, 0)
 }
 
-func (this constraints) AddConstraint(t1 *variable, t2 term) constraints {
+func (this constraints) AddConstraint(t1 *variable, t2 Term) constraints {
 	this = append(this, constraint{t1, t2})
 	return this
 }
-// func (this constraints) AddConstraints(t1s []term, t2s []term) constraints {
+// func (this constraints) AddConstraints(t1s []Term, t2s []Term) constraints {
 // 	if len(t1s) != len(t2s) { os.Exit(1) }
 // 	for i, t1 := range t1s {
 // 		this = append(this, constraint{t1, t2s[i]})
@@ -80,6 +80,6 @@ func (this constraints) BuildSubstitution() (subst substitution, matches bool) {
 // 	return nil, false
 // }
 
-// func (this constraints) ApplyOne(lhs *variable, rhs term) constraints {
+// func (this constraints) ApplyOne(lhs *variable, rhs Term) constraints {
 // 	return this
 // }

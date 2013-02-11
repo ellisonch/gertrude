@@ -2,10 +2,15 @@ package terms
 
 import "fmt"
 
-type system struct {
-	rules []rule
+type System struct {
+	rules []Rule
 }
-func (this system) String() string {
+
+func NewSystem(rules []Rule) System {
+	return System{rules}
+}
+
+func (this System) String() string {
 	result := ""
 	for _, rule := range this.rules {
 		result += rule.String() + "\n"
@@ -13,7 +18,7 @@ func (this system) String() string {
 	return result
 }
 
-func (this system) Rewrite(t1 term) (term, bool) {
+func (this System) Rewrite(t1 Term) (Term, bool) {
 	applications := 1
 	for applications > 0 {
 		applications = 0

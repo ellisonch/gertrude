@@ -2,27 +2,27 @@ package terms
 
 import "fmt"
 
-type rule struct {
-	lhs term
-	rhs term
+type Rule struct {
+	lhs Term
+	rhs Term
 }
-func (this rule) String() string {
+func (this Rule) String() string {
 	return this.lhs.String() + " => " + this.rhs.String()
 }
 
-func NewRule(lhs term, rhs term) rule {
-	return rule{lhs, rhs}
+func NewRule(lhs Term, rhs Term) Rule {
+	return Rule{lhs, rhs}
 }
 
-func (r rule) Apply(t term) (term, bool) {
+func (r Rule) Apply(t Term) (Term, bool) {
 	if subst, ok := Match(r.lhs, t); ok {
 		return r.rhs.Copy().ApplySubstitution(subst)
 	}
 	return nil, false
 }
 
-func (r rule) ApplyAnywhere(t term) (term, bool) {
-	transform := func(t term) (term, bool) {
+func (r Rule) ApplyAnywhere(t Term) (Term, bool) {
+	transform := func(t Term) (Term, bool) {
 		if subst, ok := Match(r.lhs, t); ok {
 			fmt.Printf("Found a match with subst: %s\n", subst)
 			a, b := r.rhs.Copy().ApplySubstitution(subst)
@@ -38,7 +38,7 @@ func (r rule) ApplyAnywhere(t term) (term, bool) {
 }
 
 
-// func (this rule) match_aux(t term, c constraints) (subst substitution, matches bool) {
+// func (this Rule) match_aux(t term, c constraints) (subst substitution, matches bool) {
 // 	lhs := this.lhs
 // 	// rhs := this.rhs
 
