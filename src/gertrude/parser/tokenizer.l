@@ -11,7 +11,6 @@ package parser
 import (
     "bufio"
     "log"
-    "strconv"
 )
 
 type yylexer struct{
@@ -46,6 +45,7 @@ func (y yylexer) Error(e string) {
 
 func (y *yylexer) Lex(lval *yySymType) int {
     var err error
+    _ = err
     c := y.current
     if y.empty {
         c, y.empty = y.getc(), false
@@ -60,16 +60,25 @@ E [eE][-+]?{D}
 F {D}"."{D}?{E}?|{D}{E}?|"."{D}{E}?
 
 %%
-    y.buf = y.buf[:0]
 
 [ \t\r]+
 
-{F}
-    if lval.value, err = strconv.ParseFloat(string(y.buf), 64); err != nil {
-        log.Fatal(err)
-    }
+[A-Z][a-zA-Z0-9_]*
+    lval.string = string(y.buf) 
+    return VARIABLE
 
-    return NUM
+[+\-*^/0-9a-z][+\-*^/0-9a-zA-Z]*
+    lval.string = string(y.buf)
+    return FUNCTION
+
+";" { return SEMICOLON }
+"=>" { return REWRITE }
+
+[,] { return COMMA }
+[\/\/].+ { }
+
+"(" { return LEFT_PAREN }
+")" { return RIGHT_PAREN }
 
 %%
     y.empty = true

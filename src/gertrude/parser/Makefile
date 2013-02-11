@@ -7,8 +7,8 @@ parser.go: parser.y
 tokenizer.go: tokenizer.l
 	@golex -t $< | gofmt > $@
 
-test: parser sample.grt
-	@./parser < sample.grt
+test: install
+	@go test
 
 clean:
 	@rm -f y.go y.output tokenizer.go parser.go parser
