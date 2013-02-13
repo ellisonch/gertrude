@@ -11,6 +11,7 @@ package parser
 import (
     "bufio"
     "log"
+    "fmt"
 )
 
 type yylexer struct{
@@ -18,6 +19,7 @@ type yylexer struct{
     buf []byte
     empty bool
     current byte
+    col int
 }
 
 func newLexer(src *bufio.Reader) (y *yylexer) {
@@ -40,6 +42,9 @@ func (y *yylexer) getc() byte {
 }
 
 func (y yylexer) Error(e string) {
+    log.Printf("Error in tokenizer\n")
+    log.Printf("%s\n", y.buf)
+    log.Printf("%s\n", y.current)
     log.Fatal(e)
 }
 
@@ -55,16 +60,14 @@ func (y *yylexer) Lex(lval *yySymType) int {
 %yyc c
 %yyn c = y.getc()
 
-D [0-9]+
-E [eE][-+]?{D}
-F {D}"."{D}?{E}?|{D}{E}?|"."{D}{E}?
-
 %%
+    buf = buf[:0]
 
-[ \t\r]+
+[ \t\r\n]+
 
 [A-Z][a-zA-Z0-9_]*
-    lval.string = string(y.buf) 
+    fmt.Printf("Lexed variable as\n%s\n", string(y.buf))
+    lval.string = string(y.buf)
     return VARIABLE
 
 [+\-*^/0-9a-z][+\-*^/0-9a-zA-Z]*
