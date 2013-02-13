@@ -4,28 +4,9 @@
 
 using namespace std;
 
-class Term {
-public:
-    // virtual ~Term() {}
-    // virtual Term() {}
-};
-
-class Rule {
-private:
-    Term* _lhs;
-    Term* _rhs;
-public:    
-    Rule(Term* lhs, Term* rhs) {
-        _lhs = lhs;
-        _rhs = rhs;
-    }
-    std::string AsXML() {
-        return std::string("a rule\n");
-    }
-};
-
-static std::string wrapWith(std::string s, const char* name) {
-    std::string retval = std::string("<");
+static string wrapWith(string s, const char* name) {
+    // cout << "Wrapping " << s << " with " << name << endl;
+    string retval = string("<");
     retval.append(name);
     retval.append(">");
     retval.append(s);
@@ -35,49 +16,109 @@ static std::string wrapWith(std::string s, const char* name) {
     return retval;
 }
 
+class Term {
+public:
+    // virtual ~Term() {}
+    // virtual Term() {}
+    virtual string AsXML() = 0;
+    virtual string AsString() = 0;
+};
+
+class Rule {
+private:
+    Term* _lhs;
+    Term* _rhs;
+public:    
+    Rule(Term* lhs, Term* rhs) {
+        cout << "Rule LHS " << lhs->AsString() << endl;
+        cout << "Rule RHS " << rhs->AsString() << endl;
+        _lhs = lhs;
+        _rhs = rhs;
+    }
+    string AsXML() {
+        cout << "Visiting Rule " << endl;
+        string lhs = wrapWith(_lhs->AsXML(), "LHS");
+        string rhs = wrapWith(_rhs->AsXML(), "RHS");
+        return wrapWith(lhs.append(rhs), "Rule");
+    }
+    string AsString() {
+        return _lhs->AsString().append(" => ").append(_rhs->AsString()).append("\n");
+    }
+};
+
 class RuleSet {
 private:
-    std::vector<Rule>* _rules;
-public:    
-    RuleSet(std::vector<Rule>* rules) {
+    vector<Rule>* _rules;
+public:
+    RuleSet(vector<Rule>* rules) {
         _rules = rules;
     }
-    std::string AsXML() {
-        std::string retval = std::string("<?xml version=\"1.0\"?>\n");
+    string AsXML() {
+        string retval = string("<?xml version=\"1.0\"?>\n");
 
-        std::string rules = std::string("");
-        for(std::vector<Rule>::iterator it = _rules->begin(); it != _rules->end(); ++it) {
+        string rules = string("");
+        for(vector<Rule>::iterator it = _rules->begin(); it != _rules->end(); ++it) {
             rules.append((*it).AsXML());
         }
 
         retval.append(wrapWith(rules, "Rules"));
         return retval;
     }
+    string AsString() {
+        string rules = string("");
+        for(vector<Rule>::iterator it = _rules->begin(); it != _rules->end(); ++it) {
+            rules.append((*it).AsString());
+        }
+
+        return rules;
+    }
 };
 
 class Function : public Term {
 private:
-    std::string _name;
-    std::vector<Term>* _children;
+    string _name;
+    vector<Term*>* _children;
 public:
     // Function(const char* name) {
-    //     _name = std::string(name);
-    //     _children = new std::vector<Term>();
+    //     _name = string(name);
+    //     _children = new vector<Term>();
     // }
-    Function(const char* name, std::vector<Term>* children = new std::vector<Term>()) {
-        _name = std::string(name);
+    Function(string name, vector<Term*>* children = new vector<Term*>()) {
+        _name = name;
         _children = children;
+    }
+    string AsXML() {
+        cout << "Visiting: " << _name << endl;
+        string children = string("");
+        for (vector<Term*>::iterator it = _children->begin(); it != _children->end(); ++it) {
+            children.append((*it)->AsXML());
+        }
+        string childrenNode = wrapWith(children, "Children");
+        string nameNode = wrapWith(_name, "Name");
+        return wrapWith(nameNode.append(childrenNode), "Function");
+    }
+    string AsString() {
+        string children = string("");
+        for(vector<Term*>::iterator it = _children->begin(); it != _children->end(); ++it) {
+            children.append((*it)->AsString());
+        }
+        return string(_name).append("(").append(children).append(")");
     }
 };
 
 class Variable : public Term {
 private:
-    std::string _name;
+    string _name;
 public:
-    Variable(const char* name) {
-        _name = std::string(name);
+    Variable(string name) {
+        cout << "Building " << name << endl;
+        _name = name;
     }
     string AsXML() {
-        return _name;
+        cout << "Visiting: " << _name << endl;
+        return wrapWith(_name, "Variable");
+    }
+    string AsString() {
+        return string(_name);
     }
 };

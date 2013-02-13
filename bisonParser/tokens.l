@@ -17,8 +17,12 @@ char linebuf[500];
 [\n\r]+.*  { strncpy(linebuf, yytext+1, sizeof(linebuf)); /* save the next line */
         yyless(1);      /* give back all but the \n to rescan */
       }
-[A-Z][a-zA-Z0-9_]* { yylval.string = yytext; return VARIABLE; }
-[+\-*^/0-9a-z][+\-*^/0-9a-zA-Z]* { yylval.string = yytext; return FUNCTION; }
+[A-Z][a-zA-Z0-9_]* { yylval.aString = new string(yytext); return VARIABLE; }
+[+\-*^/0-9a-z][+\-*^/0-9a-zA-Z]* {
+	// cout << "Lexing " << yytext << endl;
+	yylval.aString = new string(yytext);
+	return FUNCTION; 
+}
 [,] { return COMMA; }
 [\/\/].+ { }
 ";" { return SEMICOLON; }
