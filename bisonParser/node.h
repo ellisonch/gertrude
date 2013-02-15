@@ -53,16 +53,16 @@ public:
     RuleSet(vector<Rule>* rules) {
         _rules = rules;
     }
-    string AsXML() {
+    string AsXML(Term* input) {
         string retval = string("<?xml version=\"1.0\"?>\n");
 
         string rules = string("");
         for(vector<Rule>::iterator it = _rules->begin(); it != _rules->end(); ++it) {
             rules.append((*it).AsXML());
         }
-
-        retval.append(wrapWith(rules, "Rules"));
-        return retval;
+        string body = wrapWith(rules, "Rules");
+        body.append(wrapWith(input->AsXML(), "Input"));
+        return retval.append(wrapWith(body, "Gertrude"));
     }
     string AsString() {
         string rules = string("");

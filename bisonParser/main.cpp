@@ -1,11 +1,12 @@
 #include <iostream>
 #include "node.h"
 extern RuleSet* program;
+extern Term* input;
 extern int yyparse();
 
 int main(int argc, char **argv) {
     yyparse();
-    std::cout << program->AsXML() << std::endl;
+    std::cout << program->AsXML(input) << std::endl;
    	// std::cout << endl << program->AsString() << std::endl;
 
     // Variable* v1 = new Variable(string("Q"));

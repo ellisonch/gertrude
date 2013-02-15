@@ -29,6 +29,7 @@ char linebuf[500];
 "=>" { return REWRITE; }
 "(" { return LEFT_PAREN; }
 ")" { return RIGHT_PAREN; }
+"|" { return PIPE; }
 
 <<EOF>>  { return 0; }
 [ \t\n\r]+ { }

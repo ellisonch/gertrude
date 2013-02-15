@@ -5,19 +5,22 @@ import "log"
 // import "encoding/xml"
 import "gertrude/terms"
 import "os"
+import "time"
+
+
 
 func main() {
-	zero := terms.NewFunction("0", []terms.Term{})
-	one := terms.NewFunction("s", []terms.Term{zero})
-	two := terms.NewFunction("s", []terms.Term{one})
-	three := terms.NewFunction("s", []terms.Term{two})
+	// zero := terms.NewFunction("0", []terms.Term{})
+	// one := terms.NewFunction("s", []terms.Term{zero})
+	// two := terms.NewFunction("s", []terms.Term{one})
+	// three := terms.NewFunction("s", []terms.Term{two})
 	// four := terms.NewFunction("s", []terms.Term{three})
 
 	// _ = two
 	// _ = three
 	// _ = four
 
-	onePlusThree := terms.NewFunction("+", []terms.Term{one, three})
+	// onePlusThree := terms.NewFunction("+", []terms.Term{one, three})
 
 	// x := terms.NewVariable("X")
 	// y := terms.NewVariable("Y")
@@ -52,7 +55,7 @@ func main() {
 	// fmt.Printf("%s\n", addition)
 
 	// fmt.Printf("%s\n", terms.Parse(os.Stdin))
-	if sys, ok := terms.Parse(); ok {
+	if sys, input, ok := terms.Parse(); ok {
 		// fmt.Printf("%s\n", "parsed!")
 		// fmt.Printf("%s\n", sys.String())
 		logFile, err := os.Create("rewriting.log")
@@ -62,7 +65,11 @@ func main() {
 		}
 		defer logFile.Close()
 		l := log.New(logFile, "", log.LstdFlags)
-		t2, ok := sys.Rewrite(onePlusThree, l)
+		time1 := time.Now()
+		t2, rewrites, ok := sys.Rewrite(input, l)
+		time2 := time.Now()
+		delta := time2.Sub(time1).Seconds()
+		fmt.Printf("%d rewrites; %0.3f rewrites per second\n", rewrites, float64(rewrites)/delta)
 		if ok {
 			fmt.Printf("%s\n", t2)
 		}

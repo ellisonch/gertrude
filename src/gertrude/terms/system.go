@@ -18,9 +18,10 @@ func (this System) String() string {
 	return result
 }
 
-func (this System) Rewrite(t1 Term, aLog *logPackage.Logger) (Term, bool) {
+func (this System) Rewrite(t1 Term, aLog *logPackage.Logger) (Term, uint64, bool) {
 	log = aLog
 	applications := 1
+	var rewrites uint64
 	for applications > 0 {
 		applications = 0
 		for _, rule := range this.rules {
@@ -29,10 +30,11 @@ func (this System) Rewrite(t1 Term, aLog *logPackage.Logger) (Term, bool) {
 				log.Printf("Got %s\n", t2)
 				t1 = t2
 				applications++
+				rewrites++
 			} else {
 				log.Printf("Failed\n")
 			}
 		}
 	}
-	return t1, true
+	return t1, rewrites-1, true
 }

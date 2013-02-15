@@ -10,6 +10,7 @@ int yyerror(const char *p);
 extern char linebuf[500];
 
 RuleSet* program;
+Term* input;
 %}
 
 //-- SYMBOL SEMANTIC VALUES -----------------------------
@@ -23,7 +24,7 @@ RuleSet* program;
   std::vector<Rule>* rules;
   RuleSet* ruleset;
 };
-%token REWRITE COMMA LEFT_PAREN RIGHT_PAREN SEMICOLON
+%token REWRITE COMMA LEFT_PAREN RIGHT_PAREN SEMICOLON PIPE
 %token <aString> VARIABLE FUNCTION
 
 %type <term> term variable function
@@ -37,10 +38,11 @@ RuleSet* program;
 
 //-- GRAMMAR RULES ---------------------------------------
 %%
-program: run { 
+program: run PIPE term { 
   reverse($1->begin(), $1->end());
   $$ = new RuleSet($1); 
   program = $$;
+  input = $3;
 }
 
 run: rule run { 
