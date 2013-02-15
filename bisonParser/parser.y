@@ -92,8 +92,8 @@ children: term {
 }
 | term COMMA children { 
   $$ = $3;
-  /*$3->push_back(*$1);
-  delete $1;*/
+  $$->push_back($1);
+  /*delete $1;*/
 }
 
 %%

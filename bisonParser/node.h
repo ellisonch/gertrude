@@ -91,7 +91,9 @@ public:
         // cout << "Visiting: " << _name << endl;
         string children = string("");
         for (vector<Term*>::iterator it = _children->begin(); it != _children->end(); ++it) {
-            children.append((*it)->AsXML());
+            string childXML = (*it)->AsXML();
+            // cout << childXML << endl;
+            children.append(wrapWith(childXML, "Child"));
         }
         string childrenNode = wrapWith(children, "Children");
         string nameNode = wrapWith(_name, "Name");

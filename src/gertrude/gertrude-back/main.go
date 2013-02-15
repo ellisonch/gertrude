@@ -53,8 +53,8 @@ func main() {
 
 	// fmt.Printf("%s\n", terms.Parse(os.Stdin))
 	if sys, ok := terms.Parse(); ok {
-		fmt.Printf("%s\n", "parsed!")
-		fmt.Printf("%s\n", sys.String())
+		// fmt.Printf("%s\n", "parsed!")
+		// fmt.Printf("%s\n", sys.String())
 		logFile, err := os.Create("rewriting.log")
 		if err != nil {
 			fmt.Println("Error opening file:", err)
@@ -63,6 +63,8 @@ func main() {
 		defer logFile.Close()
 		l := log.New(logFile, "", log.LstdFlags)
 		t2, ok := sys.Rewrite(onePlusThree, l)
-		fmt.Printf("Final Answer: %s, %v\n", t2, ok)
+		if ok {
+			fmt.Printf("%s\n", t2)
+		}
 	}
 }
