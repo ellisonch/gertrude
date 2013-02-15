@@ -77,6 +77,7 @@ function: FUNCTION {
 }
 | FUNCTION LEFT_PAREN children RIGHT_PAREN {
   // cout << "Making function " << *$1 << endl;
+  reverse($3->begin(), $3->end());
   $$ = new Function(*$1, $3);
   delete $1;
 }
