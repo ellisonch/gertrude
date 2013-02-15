@@ -1,7 +1,6 @@
 package terms
 
 // import "os"
-import "fmt"
 
 type constraint struct {
 	lhs *variable
@@ -36,7 +35,7 @@ func (this constraints) AddConstraint(t1 *variable, t2 Term) constraints {
 // }
 
 func (this constraints) BuildSubstitution() (subst substitution, matches bool) {
-	fmt.Printf("Trying to build substitution from constraints: %s\n", this)
+	log.Printf("Trying to build substitution from constraints: %s\n", this)
 
 	s := NewSubstitution()
 
@@ -52,7 +51,7 @@ func (this constraints) BuildSubstitution() (subst substitution, matches bool) {
 		}
 	}
 
-	fmt.Printf("Done.  Subst: %s\n", s)
+	log.Printf("Done.  Subst: %s\n", s)
 
 	return s, true
 }

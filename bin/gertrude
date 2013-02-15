@@ -1,0 +1,2 @@
+#!/bin/sh
+gertrude-parser < $1 | gertrude-back

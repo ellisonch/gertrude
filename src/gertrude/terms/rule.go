@@ -1,7 +1,5 @@
 package terms
 
-import "fmt"
-
 type Rule struct {
 	lhs Term
 	rhs Term
@@ -24,16 +22,16 @@ func (r Rule) Apply(t Term) (Term, bool) {
 func (r Rule) ApplyAnywhere(t Term) (Term, bool) {
 	transform := func(t Term) (Term, bool) {
 		if subst, ok := Match(r.lhs, t); ok {
-			fmt.Printf("Found a match with subst: %s\n", subst)
+			log.Printf("Found a match with subst: %s\n", subst)
 			a, b := r.rhs.Copy().ApplySubstitution(subst)
-			fmt.Printf("Transform returning %s, %v\n", a, b)
+			log.Printf("Transform returning %s, %v\n", a, b)
 			return a, b
 		}
-		fmt.Printf("Transform returning %s, %v\n", nil, false)
+		log.Printf("Transform returning %s, %v\n", nil, false)
 		return nil, false
 	}
 	a, b := t.TransformOnceRecursively(transform)
-	fmt.Printf("ApplyAnywhere returning %s, %v\n", a, b)
+	log.Printf("ApplyAnywhere returning %s, %v\n", a, b)
 	return a, b
 }
 

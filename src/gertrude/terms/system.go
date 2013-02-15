@@ -1,6 +1,6 @@
 package terms
 
-import "fmt"
+import logPackage "log"
 
 type System struct {
 	rules []Rule
@@ -18,18 +18,19 @@ func (this System) String() string {
 	return result
 }
 
-func (this System) Rewrite(t1 Term) (Term, bool) {
+func (this System) Rewrite(t1 Term, aLog *logPackage.Logger) (Term, bool) {
+	log = aLog
 	applications := 1
 	for applications > 0 {
 		applications = 0
 		for _, rule := range this.rules {
-			fmt.Printf("Trying to apply %s somewhere in term %s\n", rule, t1)
+			log.Printf("Trying to apply %s somewhere in term %s\n", rule, t1)
 			if t2, ok := rule.ApplyAnywhere(t1); ok {
-				fmt.Printf("Got %s\n", t2)
+				log.Printf("Got %s\n", t2)
 				t1 = t2
 				applications++
 			} else {
-				fmt.Printf("Failed\n")
+				log.Printf("Failed\n")
 			}
 		}
 	}

@@ -116,7 +116,7 @@ public:
     }
     string AsXML() {
         // cout << "Visiting: " << _name << endl;
-        return wrapWith(_name, "Variable");
+        return wrapWith(wrapWith(_name, "Name"), "Variable");
     }
     string AsString() {
         return string(_name);
