@@ -53,7 +53,7 @@ run: rule run {
 }
 
 rule: term REWRITE term SEMICOLON { 
-  cout << "--------------" << endl;
+  // cout << "--------------" << endl;
   $$ = new Rule($1, $3); 
 }
 // | error SEMICOLON { yyerrok; }
@@ -63,18 +63,18 @@ term: LEFT_PAREN term RIGHT_PAREN { $$ = $2; }
 | function { $$ = $1; }
 
 variable: VARIABLE {
-  cout << "Making variable " << *$1 << endl;
+  // cout << "Making variable " << *$1 << endl;
   $$ = new Variable(*$1);
   delete $1;
 }
 
 function: FUNCTION { 
-  cout << "Making function " << *$1 << endl;
+  // cout << "Making function " << *$1 << endl;
   $$ = new Function(*$1);
   delete $1;
 }
 | FUNCTION LEFT_PAREN children RIGHT_PAREN {
-  cout << "Making function " << *$1 << endl;
+  // cout << "Making function " << *$1 << endl;
   $$ = new Function(*$1, $3);
   delete $1;
 }

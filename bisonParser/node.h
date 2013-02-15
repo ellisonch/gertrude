@@ -30,13 +30,13 @@ private:
     Term* _rhs;
 public:    
     Rule(Term* lhs, Term* rhs) {
-        cout << "Rule LHS " << lhs->AsString() << endl;
-        cout << "Rule RHS " << rhs->AsString() << endl;
+        // cout << "Rule LHS " << lhs->AsString() << endl;
+        // cout << "Rule RHS " << rhs->AsString() << endl;
         _lhs = lhs;
         _rhs = rhs;
     }
     string AsXML() {
-        cout << "Visiting Rule " << endl;
+        // cout << "Visiting Rule " << endl;
         string lhs = wrapWith(_lhs->AsXML(), "LHS");
         string rhs = wrapWith(_rhs->AsXML(), "RHS");
         return wrapWith(lhs.append(rhs), "Rule");
@@ -88,7 +88,7 @@ public:
         _children = children;
     }
     string AsXML() {
-        cout << "Visiting: " << _name << endl;
+        // cout << "Visiting: " << _name << endl;
         string children = string("");
         for (vector<Term*>::iterator it = _children->begin(); it != _children->end(); ++it) {
             children.append((*it)->AsXML());
@@ -111,11 +111,11 @@ private:
     string _name;
 public:
     Variable(string name) {
-        cout << "Building " << name << endl;
+        // cout << "Building " << name << endl;
         _name = name;
     }
     string AsXML() {
-        cout << "Visiting: " << _name << endl;
+        // cout << "Visiting: " << _name << endl;
         return wrapWith(_name, "Variable");
     }
     string AsString() {

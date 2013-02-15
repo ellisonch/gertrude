@@ -6,7 +6,7 @@ extern int yyparse();
 int main(int argc, char **argv) {
     yyparse();
     std::cout << program->AsXML() << std::endl;
-   	std::cout << endl << program->AsString() << std::endl;
+   	// std::cout << endl << program->AsString() << std::endl;
 
     // Variable* v1 = new Variable(string("Q"));
     // vector<Term*>* vec1 = new vector<Term*>();
