@@ -15,7 +15,9 @@ var log *logPackage.Logger
 func main() {
 	flag.Parse()
 	if *inputFile == "" {
-		fmt.Printf("Must specify an input file")
+		fmt.Fprintf(os.Stderr, "Must specify an input file!\n")
+		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
+    	flag.PrintDefaults()
 		os.Exit(1)
 	}
 
