@@ -64,7 +64,8 @@ func main() {
 			return
 		}
 		defer logFile.Close()
-		l := log.New(logFile, "", log.LstdFlags)
+		// l := log.New(logFile, "", log.LstdFlags)
+		l := log.New(logFile, "", 0)
 		time1 := time.Now()
 		t2, rewrites, ok := sys.Rewrite(input, l)
 		time2 := time.Now()

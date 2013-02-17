@@ -108,6 +108,6 @@ int yyerror(const char *p) {
   if(yylloc.first_line) {
     cerr << "ERROR line " <<yylloc.first_line << ": " << p << endl << linebuf << endl;
   }
-  return 0;
+  exit(1);
 }
 

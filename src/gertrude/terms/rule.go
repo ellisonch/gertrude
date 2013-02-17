@@ -24,14 +24,14 @@ func (r Rule) ApplyAnywhere(t Term) (Term, bool) {
 		if subst, ok := Match(r.lhs, t); ok {
 			log.Printf("Found a match with subst: %s\n", subst)
 			a, b := r.rhs.Copy().ApplySubstitution(subst)
-			log.Printf("Transform returning %s, %v\n", a, b)
+			// log.Printf("Transform returning %s, %v\n", a, b)
 			return a, b
 		}
-		log.Printf("Transform returning %s, %v\n", nil, false)
+		// log.Printf("Transform returning %s, %v\n", nil, false)
 		return nil, false
 	}
 	a, b := t.TransformOnceRecursively(transform)
-	log.Printf("ApplyAnywhere returning %s, %v\n", a, b)
+	// log.Printf("ApplyAnywhere returning %s, %v\n", a, b)
 	return a, b
 }
 

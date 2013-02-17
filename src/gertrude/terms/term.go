@@ -59,11 +59,11 @@ func (this *function) String() string {
 	return retval
 }
 func (t1 *function) match_aux(t2 Term, c constraints) (constraints, bool) {
-	log.Printf("Trying to match %s with %s given constraints %s\n", t1, t2, c)
+	// log.Printf("Trying to match %s with %s given constraints %s\n", t1, t2, c)
 	return t2.match_with_function(t1, c)
 }
 func (t1 *function) match_with_function(t2 *function, c constraints) (constraints, bool) {
-	log.Printf("Trying to match %s with %s given constraints %s\n", t2, t1, c)
+	// log.Printf("Trying to match %s with %s given constraints %s\n", t2, t1, c)
 	if t1.constructor != t2.constructor {
 		return nil, false
 	}
@@ -83,7 +83,7 @@ func (t1 *function) match_with_function(t2 *function, c constraints) (constraint
 // need to consider whether we're replacing in place or what
 func (t *function) ApplySubstitution(s substitution) (Term, bool) {
 	newChildren := []Term{}
-	log.Printf("Applying %s to %s\n", s, t)
+	// log.Printf("Applying %s to %s\n", s, t)
 	for _, child := range t.children {
 		if newC, ok := child.ApplySubstitution(s); ok {
 			newChildren = append(newChildren, newC)
@@ -92,26 +92,26 @@ func (t *function) ApplySubstitution(s substitution) (Term, bool) {
 		}
 	}
 	t.children = newChildren
-	log.Printf("ApplySubstitution returning %s\n", t)
+	// log.Printf("ApplySubstitution returning %s\n", t)
 	return t, true
 }
 
 func (t *function) TransformOnceRecursively(trans transformer) (Term, bool) {
-	log.Printf("Trying top...\n")
+	// log.Printf("Trying top...\n")
 	if tNew, ok := trans(t); ok {
-		log.Printf("TransformOnceRecursively returning %s, %v\n", tNew, ok)
+		// log.Printf("TransformOnceRecursively returning %s, %v\n", tNew, ok)
 		return tNew, true
 	}
-	log.Printf("Trying children...\n")
+	// log.Printf("Trying children...\n")
 	for i, child := range t.children {
 		if newC, ok := child.TransformOnceRecursively(trans); ok {
 			t.children[i] = newC
-			log.Printf("TransformOnceRecursively returning %s, %v\n", t, ok)
+			// log.Printf("TransformOnceRecursively returning %s, %v\n", t, ok)
 			return t, true
 		}
 	}
-	log.Printf("Giving up...\n")
-	log.Printf("TransformOnceRecursively returning %s, %v\n", nil, false)
+	// log.Printf("Giving up...\n")
+	// log.Printf("TransformOnceRecursively returning %s, %v\n", nil, false)
 	return nil, false
 }
 
@@ -165,11 +165,11 @@ func (this *variable) String() string {
 	return this.name
 }
 func (t1 *variable) match_aux(t2 Term, c constraints) (constraints, bool) {
-	log.Printf("Trying to match %s with %s given constraints %s\n", t1, t2, c)
+	// log.Printf("Trying to match %s with %s given constraints %s\n", t1, t2, c)
 	return c.AddConstraint(t1, t2), true
 }
 func (t1 *variable) match_with_function(t2 *function, c constraints) (constraints, bool) {
-	log.Printf("Trying to match %s with %s given constraints %s\n", t1, t2, c)
+	// log.Printf("Trying to match %s with %s given constraints %s\n", t1, t2, c)
 	return c.AddConstraint(t1, t2), true
 }
 func (this *variable) ContainsVariable(v *variable) bool {

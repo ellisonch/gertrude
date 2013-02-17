@@ -32,7 +32,7 @@ func (this System) Rewrite(t1 Term, aLog *logPackage.Logger) (Term, uint64, bool
 				applications++
 				rewrites++
 			} else {
-				log.Printf("Failed\n")
+				// log.Printf("Failed\n")
 			}
 		}
 	}
