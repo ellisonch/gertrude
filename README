@@ -1,4 +1,14 @@
 This is the Gertrude Rewriting Language.
+Please contact Chucky Ellison (cme@freefour.com) with any questions.
 
 To install:
-- set your GOPATH to the directory where you put this stuff, e.g., /foo/gertrude
+- add where you put this repository, e.g., /foo/gertrude, to your GOPATH
+- add the go bin destination to your PATH (possibly /foo/gertrude/bin, unless your GOTPATH is more complicated)
+- add /foo/gertrude/bisonParser to your path (for the gertrude-parser command)
+- run `make test` and it should print out good stuff
+
+Requires:
+- flex
+- bison
+- g++
+- go
