@@ -1,10 +1,7 @@
-package terms
+package main
 
 import "strings"
 // import "fmt"
-import logPackage "log"
-
-var log *logPackage.Logger
 
 type transformer func (Term) (Term, bool)
 

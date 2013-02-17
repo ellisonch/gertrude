@@ -1,4 +1,4 @@
-package terms
+package main
 
 import "os"
 import "fmt"

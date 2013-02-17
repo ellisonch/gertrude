@@ -1,4 +1,4 @@
-package terms
+package main
 
 type Rule struct {
 	lhs Term

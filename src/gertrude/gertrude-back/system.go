@@ -1,6 +1,4 @@
-package terms
-
-import logPackage "log"
+package main
 
 type System struct {
 	rules []Rule
@@ -18,8 +16,7 @@ func (this System) String() string {
 	return result
 }
 
-func (this System) Rewrite(t1 Term, aLog *logPackage.Logger) (Term, uint64, bool) {
-	log = aLog
+func (this System) Rewrite(t1 Term) (Term, uint64, bool) {
 	applications := 1
 	var rewrites uint64
 	for applications > 0 {
