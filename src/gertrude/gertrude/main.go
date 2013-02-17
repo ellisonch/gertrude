@@ -8,13 +8,18 @@ import "time"
 import "flag"
 
 var doTrace = flag.Bool("trace", false, "Trace exection to log file")
-
+var inputFile = flag.String("input", "", "File containing a Gertrude definition")
 
 var log *logPackage.Logger
 
-
 func main() {
-	if sys, input, ok := Parse("sample.grt"); ok {
+	flag.Parse()
+	if *inputFile == "" {
+		fmt.Printf("Must specify an input file")
+		os.Exit(1)
+	}
+
+	if sys, input, ok := Parse(*inputFile); ok {
 		// fmt.Printf("%s\n", "parsed!")
 		// fmt.Printf("%s\n", sys.String())
 		logFile, err := os.Create("rewriting.log")
