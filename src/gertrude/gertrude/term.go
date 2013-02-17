@@ -1,12 +1,14 @@
 package main
 
 import "strings"
-// import "fmt"
+import "fmt"
 
 type transformer func (Term) (Term, bool)
 
 type Term interface {
 	String() string
+	AsDot() string
+	DotNode() string
 	match_aux(t Term, c constraints) (constraints, bool)
 	match_with_function(t *function, c constraints) (constraints, bool)
 	ContainsVariable(v *variable) bool
@@ -55,6 +57,29 @@ func (this *function) String() string {
 	retval += ")"
 	return retval
 }
+
+func (this *function) DotNode() string {
+	return fmt.Sprintf(`"%p_%d"`, this, rewrites)
+}
+
+func (this *function) AsDot() string {
+	retval := ""
+	retval += fmt.Sprintf(`%s [label="%s"];`, this.DotNode(), this.constructor.String()) + "\n"
+	arity := len(this.children)
+	if arity == 0 {
+		return retval
+	}
+
+	stringChildren := []string{}
+	for _, child := range this.children {
+		retval += fmt.Sprintf("%s -> %s\n", this.DotNode(), child.DotNode())
+		stringChildren = append(stringChildren, child.AsDot())
+	}
+
+	retval += strings.Join(stringChildren, "\n")
+	return retval
+}
+
 func (t1 *function) match_aux(t2 Term, c constraints) (constraints, bool) {
 	// log.Printf("Trying to match %s with %s given constraints %s\n", t1, t2, c)
 	return t2.match_with_function(t1, c)
@@ -193,6 +218,14 @@ func (t *variable) TransformOnceRecursively(trans transformer) (Term, bool) {
 }
 func (this *variable) Copy() Term {
 	return NewVariable(this.name)
+}
+func (this *variable) DotNode() string {
+	return fmt.Sprintf(`"%p_%d"`, this, rewrites)
+}
+func (this *variable) AsDot() string {
+	retval := ""
+	retval += fmt.Sprintf(`"%s" [label="%s"];`, this.DotNode(), this.name) + "\n"
+	return retval
 }
 
 // ----------------------------------------------------------------------------------------

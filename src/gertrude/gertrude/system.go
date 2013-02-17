@@ -16,9 +16,17 @@ func (this System) String() string {
 	return result
 }
 
+var rewrites uint64
+
 func (this System) Rewrite(t1 Term) (Term, uint64, bool) {
 	applications := 1
-	var rewrites uint64
+
+	dots := ""
+	dots += "digraph G {\n"
+	dots += "subgraph {\n"
+	dots += t1.AsDot()
+	dots += "}\n"
+
 	for applications > 0 {
 		applications = 0
 		for _, rule := range this.rules {
@@ -28,10 +36,17 @@ func (this System) Rewrite(t1 Term) (Term, uint64, bool) {
 				t1 = t2
 				applications++
 				rewrites++
+				dots += "subgraph {\n"
+				dots += t2.AsDot()
+				dots += "}\n"
 			} else {
 				// log.Printf("Failed\n")
 			}
 		}
 	}
+
+	dots += "}\n"
+	dot.WriteString(dots)
+
 	return t1, rewrites-1, true
 }

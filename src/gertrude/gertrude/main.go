@@ -3,6 +3,7 @@ package main
 import "fmt"
 import logPackage "log"
 // import "encoding/xml"
+import "bufio"
 import "os"
 import "time"
 import "flag"
@@ -11,6 +12,7 @@ var doTrace = flag.Bool("trace", false, "Trace exection to log file")
 var inputFile = flag.String("input", "", "File containing a Gertrude definition")
 
 var log *logPackage.Logger
+var dot *bufio.Writer
 
 func main() {
 	flag.Parse()
@@ -24,12 +26,22 @@ func main() {
 	if sys, input, ok := Parse(*inputFile); ok {
 		// fmt.Printf("%s\n", "parsed!")
 		// fmt.Printf("%s\n", sys.String())
+
 		logFile, err := os.Create("rewriting.log")
 		if err != nil {
 			fmt.Println("Error opening file: %s", err)
 			return
 		}
 		defer logFile.Close()
+
+		dotFile, err := os.Create("rewriting.dot")
+		if err != nil {
+			fmt.Println("Error opening file: %s", err)
+			return
+		}
+		defer dotFile.Close()
+		dot = bufio.NewWriter(dotFile)
+
 		// l := log.New(logFile, "", log.LstdFlags)
 		log = logPackage.New(logFile, "", 0)
 		time1 := time.Now()
@@ -40,5 +52,7 @@ func main() {
 		if ok {
 			fmt.Printf("%s\n", t2)
 		}
+
+		dot.Flush()
 	}
 }
