@@ -14,12 +14,12 @@ var log *logPackage.Logger
 
 
 func main() {
-	if sys, input, ok := Parse(); ok {
+	if sys, input, ok := Parse("sample.grt"); ok {
 		// fmt.Printf("%s\n", "parsed!")
 		// fmt.Printf("%s\n", sys.String())
 		logFile, err := os.Create("rewriting.log")
 		if err != nil {
-			fmt.Println("Error opening file:", err)
+			fmt.Println("Error opening file: %s", err)
 			return
 		}
 		defer logFile.Close()

@@ -1,1 +1,4 @@
 This is the Gertrude Rewriting Language.
+
+To install:
+- set your GOPATH to the directory where you put this stuff, e.g., /foo/gertrude
