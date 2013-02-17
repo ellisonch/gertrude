@@ -1,0 +1,7 @@
+*.zip
+*.log
+*.stackdump
+*.exe
+*.tmLanguage
+*.xml
+pkg
