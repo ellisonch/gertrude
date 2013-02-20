@@ -18,7 +18,8 @@ char linebuf[500];
         yyless(1);      /* give back all but the \n to rescan */
       }
 [A-Z][a-zA-Z0-9_]* { yylval.aString = new string(yytext); return VARIABLE; }
-[+\-*^/0-9a-z][+\-*^/0-9a-zA-Z]* {
+"=>" { return REWRITE; }
+[#+\-*^<>=/.~0-9a-z][+\-*^<>=/.~0-9a-zA-Z]* {
 	// cout << "Lexing " << yytext << endl;
 	yylval.aString = new string(yytext);
 	return FUNCTION; 
@@ -26,7 +27,6 @@ char linebuf[500];
 [,] { return COMMA; }
 [\/\/].+ { }
 ";" { return SEMICOLON; }
-"=>" { return REWRITE; }
 "(" { return LEFT_PAREN; }
 ")" { return RIGHT_PAREN; }
 "|" { return PIPE; }

@@ -14,6 +14,8 @@ Term* input;
 %}
 
 //-- SYMBOL SEMANTIC VALUES -----------------------------
+%error-verbose
+%define parse.lac
 %union {
   int val; 
   char sym;
@@ -106,7 +108,7 @@ children: term {
 int yyerror(const char *p) { 
   // cerr << "Error: " << p << endl; 
   if(yylloc.first_line) {
-    cerr << "ERROR line " <<yylloc.first_line << ": " << p << endl << linebuf << endl;
+    cerr << "ERROR line " << yylloc.first_line << ": " << p << endl << linebuf << endl;
   }
   exit(1);
 }
