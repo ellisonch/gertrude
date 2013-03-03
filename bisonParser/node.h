@@ -53,7 +53,7 @@ public:
     RuleSet(vector<Rule>* rules) {
         _rules = rules;
     }
-    string AsXML(Term* input) {
+    string AsXML(std::vector<Term*>* input) {
         string retval = string("<?xml version=\"1.0\"?>\n");
 
         string rules = string("");
@@ -61,7 +61,12 @@ public:
             rules.append((*it).AsXML());
         }
         string body = wrapWith(rules, "Rules");
-        body.append(wrapWith(input->AsXML(), "Input"));
+
+        string inputXML = string("");
+        for(vector<Term*>::iterator it = input->begin(); it != input->end(); ++it) {
+            inputXML.append(wrapWith((**it).AsXML(), "Input"));
+        }
+        body.append(wrapWith(inputXML, "Inputs"));
         return retval.append(wrapWith(body, "Gertrude"));
     }
     string AsString() {
@@ -73,6 +78,14 @@ public:
         return rules;
     }
 };
+
+static string cdata(string s) {
+    string retval = string("");
+    retval.append("<![CDATA[");
+    retval.append(s);
+    retval.append("]]>");
+    return retval;
+}
 
 class Function : public Term {
 private:
@@ -96,7 +109,7 @@ public:
             children.append(wrapWith(childXML, "Child"));
         }
         string childrenNode = wrapWith(children, "Children");
-        string nameNode = wrapWith(_name, "Name");
+        string nameNode = wrapWith(cdata(_name), "Name");
         return wrapWith(nameNode.append(childrenNode), "Function");
     }
     string AsString() {

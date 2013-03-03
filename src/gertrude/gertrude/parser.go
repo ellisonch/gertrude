@@ -11,7 +11,7 @@ import "io"
 type Query struct {
  	XMLName xml.Name `xml:"Gertrude"`
 	Rules []XMLRule `xml:"Rules>Rule"`
-	Input XMLTerm `xml:"Input"`
+	Inputs []XMLTerm `xml:"Inputs>Input"`
 }
 func (q Query) getSystem() System {
 	rules := make([]Rule, 0)
@@ -20,8 +20,12 @@ func (q Query) getSystem() System {
 	}
 	return NewSystem(rules)
 }
-func (q Query) getInput() Term {
-	return q.Input.getTerm()
+func (q Query) getInputs() []Term {
+	inputs := make([]Term, 0)
+	for _, term := range q.Inputs {
+		inputs = append(inputs, term.getTerm())
+	}
+	return inputs
 }
 type XMLRule struct {
 	LHS XMLTerm
@@ -64,7 +68,7 @@ func (t *XMLVariable) getVariable() Term {
 	return NewVariable(t.Name)
 }
  
-func Parse(filename string) (System, Term, bool) {
+func Parse(filename string) (System, []Term, bool) {
 	fi, err := os.Open(filename)
     if err != nil { panic(err) }
     defer fi.Close()
@@ -84,10 +88,19 @@ func Parse(filename string) (System, Term, bool) {
 		fmt.Printf("%s\n", stderr)
 		os.Exit(1)
 	}
+	if *xmlFile != "" {
+		fo, err := os.Create(*xmlFile)
+	    if err != nil { panic(err) }
+	    defer fo.Close()
+	    w := bufio.NewWriter(fo)
+	    bytes := out.Bytes()
+	    // fmt.Printf("%s\n", bytes)
+	    w.Write(bytes)
+	}
 	return ParseXML(bytes.NewReader(out.Bytes()))
 }
 
-func ParseXML(xmlReader io.Reader) (System, Term, bool) {
+func ParseXML(xmlReader io.Reader) (System, []Term, bool) {
 	// xmlFile, err := os.Open("example.xml")
 	// if err != nil {
 	// 	fmt.Println("Error opening file:", err)
@@ -113,10 +126,10 @@ func ParseXML(xmlReader io.Reader) (System, Term, bool) {
 	// fmt.Printf("%s\n", out)
 	sys := q.getSystem()
 	fmt.Printf("System:\n%s\n", sys)
-	input := q.getInput()
-	fmt.Printf("Input:\n%s\n", input)
+	inputs := q.getInputs()
+	fmt.Printf("Inputs:\n%s\n", inputs)
 	fmt.Printf("----------------------------\n")
-	return sys, input, true
+	return sys, inputs, true
 	// for _, episode := range q.EpisodeList {
 	// 	fmt.Printf("\t%s\n", episode)
 	// }

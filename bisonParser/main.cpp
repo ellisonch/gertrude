@@ -1,7 +1,7 @@
 #include <iostream>
 #include "node.h"
 extern RuleSet* program;
-extern Term* input;
+extern std::vector<Term*>* input;
 extern int yyparse();
 
 int main(int argc, char **argv) {

@@ -10,6 +10,8 @@ import "flag"
 
 var doTrace = flag.Bool("trace", false, "Trace exection to log file")
 var inputFile = flag.String("input", "", "File containing a Gertrude definition")
+var graphFile = flag.String("graph", "", "If set, generates a graph named 'graph'")
+var xmlFile = flag.String("xml", "", "If set, outputs the xml parse tree")
 
 var log *logPackage.Logger
 var dot *bufio.Writer
@@ -23,7 +25,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if sys, input, ok := Parse(*inputFile); ok {
+	if sys, inputs, ok := Parse(*inputFile); ok {
 		// fmt.Printf("%s\n", "parsed!")
 		// fmt.Printf("%s\n", sys.String())
 
@@ -43,14 +45,16 @@ func main() {
 		dot = bufio.NewWriter(dotFile)
 
 		// l := log.New(logFile, "", log.LstdFlags)
-		log = logPackage.New(logFile, "", 0)
-		time1 := time.Now()
-		t2, rewrites, ok := sys.Rewrite(input)
-		time2 := time.Now()
-		delta := time2.Sub(time1).Seconds()
-		fmt.Printf("%d rewrites; %0.3f rewrites per second\n", rewrites, float64(rewrites)/delta)
-		if ok {
-			fmt.Printf("%s\n", t2)
+		for _, input := range inputs {
+			log = logPackage.New(logFile, "", 0)
+			time1 := time.Now()
+			t2, rewrites, ok := sys.Rewrite(input)
+			time2 := time.Now()
+			delta := time2.Sub(time1).Seconds()
+			fmt.Printf("%d rewrites; %0.3f rewrites per second\n", rewrites, float64(rewrites)/delta)
+			if ok {
+				fmt.Printf("%s\n", t2)
+			}
 		}
 
 		dot.Flush()

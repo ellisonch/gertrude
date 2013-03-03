@@ -10,7 +10,7 @@ int yyerror(const char *p);
 extern char linebuf[500];
 
 RuleSet* program;
-Term* input;
+std::vector<Term*>* input;
 %}
 
 //-- SYMBOL SEMANTIC VALUES -----------------------------
@@ -22,7 +22,7 @@ Term* input;
   string* aString;
   Term* term;
   Rule* rule;
-  std::vector<Term*>* children;
+  std::vector<Term*>* terms;
   std::vector<Rule>* rules;
   RuleSet* ruleset;
 };
@@ -31,8 +31,8 @@ Term* input;
 
 %type <term> term variable function
 %type <rule> rule
-%type <rules> run
-%type <children> children
+%type <rules> rules
+%type <terms> children terms
 %type <ruleset> program
 
 %locations
@@ -40,14 +40,23 @@ Term* input;
 
 //-- GRAMMAR RULES ---------------------------------------
 %%
-program: run PIPE term { 
+program: rules PIPE terms {
   reverse($1->begin(), $1->end());
   $$ = new RuleSet($1); 
   program = $$;
   input = $3;
 }
 
-run: rule run { 
+terms: term SEMICOLON terms { 
+  $$ = $3;
+  $$->push_back($1);
+}
+| term SEMICOLON { 
+  $$ = new vector<Term*>();
+  $$->push_back($1);
+}
+
+rules: rule rules { 
   $$ = $2; 
   $$->push_back(*$1);
 }

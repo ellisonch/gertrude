@@ -20,12 +20,15 @@ var rewrites uint64
 
 func (this System) Rewrite(t1 Term) (Term, uint64, bool) {
 	applications := 1
+	rewrites = 0
 
 	dots := ""
-	dots += "digraph G {\n"
-	dots += "subgraph {\n"
-	dots += t1.AsDot()
-	dots += "}\n"
+	if *graphFile != "" {
+		dots += "digraph G {\n"
+		dots += "subgraph {\n"
+		dots += t1.AsDot()
+		dots += "}\n"
+	}
 
 	for applications > 0 {
 		applications = 0
@@ -36,17 +39,21 @@ func (this System) Rewrite(t1 Term) (Term, uint64, bool) {
 				t1 = t2
 				applications++
 				rewrites++
-				dots += "subgraph {\n"
-				dots += t2.AsDot()
-				dots += "}\n"
+				if *graphFile != "" {
+					dots += "subgraph {\n"
+					dots += t2.AsDot()
+					dots += "}\n"
+				}
 			} else {
 				// log.Printf("Failed\n")
 			}
 		}
 	}
 
-	dots += "}\n"
-	dot.WriteString(dots)
+	if *graphFile != "" {
+		dots += "}\n"
+		dot.WriteString(dots)
+	}
 
 	return t1, rewrites-1, true
 }
